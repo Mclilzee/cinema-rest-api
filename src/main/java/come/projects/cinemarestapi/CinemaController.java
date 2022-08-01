@@ -16,11 +16,11 @@ public class CinemaController {
     }
 
     @PostMapping("/purchase")
-    public Seat purchaseTicket(@RequestBody Seat seat) {
+    public Ticket purchaseTicket(@RequestBody Seat seat) {
         if (seat.getRow() < 1 || seat.getRow() > 9 || seat.getColumn() < 1 || seat.getColumn() > 9) {
             throw new TicketPurchasingException("The number of a row or a column is out of bounds!");
         }
 
-        return this.cinema.purchaseSeat(seat);
+        return this.cinema.purchaseTicket(seat);
     }
 }

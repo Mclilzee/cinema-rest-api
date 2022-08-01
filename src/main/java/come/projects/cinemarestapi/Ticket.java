@@ -1,8 +1,8 @@
 package come.projects.cinemarestapi;
 
 public class Ticket {
-    private final Seat ticket;
     private final String token;
+    private final Seat ticket;
 
     public Ticket(Seat ticket, String token) {
         this.ticket = ticket;
