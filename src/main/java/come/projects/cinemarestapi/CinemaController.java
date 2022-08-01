@@ -24,10 +24,6 @@ public class CinemaController {
             throw new TicketPurchasingException("The number of a row or a column is out of bounds!");
         }
 
-        if (this.cinema.isSeatPurchased(row, column)) {
-            throw new TicketPurchasingException("The ticket has been already purchased!");
-        }
-
         return this.cinema.purchaseSeat(row, column);
     }
 }

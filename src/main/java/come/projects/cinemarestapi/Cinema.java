@@ -43,16 +43,14 @@ public class Cinema {
     }
 
     public Seat purchaseSeat(int row, int column) {
-
-    }
-
-    public boolean isSeatPurchased(int row, int column) {
-        for (Seat seat : this.available_seats) {
+        for (int i = 0; i < this.available_seats.size(); i++) {
+            Seat seat = this.available_seats.get(i);
             if (seat.getRow() == row && seat.getColumn() == column) {
-                return false;
+                this.available_seats.remove(seat);
+                return seat;
             }
         }
 
-        return true;
+        throw new TicketPurchasingException("The ticket has been already purchased!");
     }
 }
