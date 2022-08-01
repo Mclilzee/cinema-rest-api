@@ -30,4 +30,9 @@ public class CinemaController {
 
         return this.cinema.purchaseTicket(seat);
     }
+
+    @PostMapping("/return")
+    public ResponseEntity<Object> refundTicket(@RequestBody HashMap<String, String> token) {
+        return this.cinema.refundTicket(token.get("token"));
+    }
 }

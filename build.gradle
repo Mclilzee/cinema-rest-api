@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'come.projects'
-version = '0.0.1-SNAPSHOT'
+version = '0.1.1-Refundable'
 sourceCompatibility = '17'
 
 repositories {

@@ -70,7 +70,8 @@ public class Cinema {
 
     public ResponseEntity<Object> refundTicket(String token) {
         Ticket ticket = availableTickets.get(token);
-        if (ticket.getToken().equals(token)) {
+        if (ticket != null && !ticket.isAvailable()) {
+            ticket.setAvailable(true);
             HashMap<String, Object> map = new HashMap<>();
             map.put("returned_ticket", ticket.getSeat());
             return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
