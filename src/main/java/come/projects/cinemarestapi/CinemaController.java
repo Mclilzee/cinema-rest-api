@@ -33,7 +33,7 @@ public class CinemaController {
             }
         }
 
-        return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     @PostMapping("/purchase")

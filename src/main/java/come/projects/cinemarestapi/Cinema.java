@@ -50,7 +50,7 @@ public class Cinema {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put("token", ticket.getToken());
             map.put("ticket", ticket.getSeat());
-            return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(map, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new CustomErrorMessage("The ticket has been already purchased!"), HttpStatus.BAD_REQUEST);
 
@@ -74,7 +74,7 @@ public class Cinema {
             ticket.setAvailable(true);
             HashMap<String, Object> map = new HashMap<>();
             map.put("returned_ticket", ticket.getSeat());
-            return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(map, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new CustomErrorMessage("Wrong token!"), HttpStatus.BAD_REQUEST);
         }
