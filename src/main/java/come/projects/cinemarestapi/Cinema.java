@@ -1,6 +1,10 @@
 package come.projects.cinemarestapi;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,4 +61,15 @@ public class Cinema {
         throw new TicketPurchasingException("The ticket has been already purchased!");
     }
 
+    public ResponseEntity<Object> refundTicket(String token) {
+        for (Ticket ticket : this.purchasedTickets) {
+            if (ticket.getToken().equals(token)) {
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("returned_ticket", ticket.getTicket());
+                return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
+            }
+        }
+
+        return new ResponseEntity<>(new CustomErrorMessage("Wrong token!"), HttpStatus.BAD_REQUEST);
+    }
 }
