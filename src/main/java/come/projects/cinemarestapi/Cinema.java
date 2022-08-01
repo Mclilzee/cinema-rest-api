@@ -3,41 +3,44 @@ package come.projects.cinemarestapi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Cinema {
 
-    private final int total_rows;
-    private final int total_columns;
-    private final List<Ticket> available_seats;
+    private final int totalRows;
+    private final int totalColumns;
+    private final Map<String, Ticket> availableTickets;
 
-    public Cinema(int total_rows, int total_columns) {
-        this.total_rows = total_rows;
-        this.total_columns = total_columns;
-        this.available_seats = new ArrayList<>();
+    public Cinema(int totalRows, int totalColumns) {
+        this.totalRows = totalRows;
+        this.totalColumns = totalColumns;
+        this.availableTickets = new ConcurrentHashMap<>();
 
         generateTickets();
     }
 
-    public int getTotal_rows() {
-        return total_rows;
+    public int getTotalRows() {
+        return totalRows;
     }
 
-    public int getTotal_columns() {
-        return total_columns;
+    public int getTotalColumns() {
+        return totalColumns;
     }
 
-    public List<Ticket> getAvailable_seats() {
-        return available_seats;
+    public Map<String, Ticket> getAvailableTickets() {
+        return availableTickets;
     }
 
     private void generateTickets() {
-        for (int i = 1; i <= total_rows; i++) {
-            for (int j = 1; j <= total_columns; j++) {
-                String uniqueID = UUID.randomUUID().toString();
+        for (int i = 1; i <= totalRows; i++) {
+            for (int j = 1; j <= totalColumns; j++) {
+                String token = UUID.randomUUID().toString();
                 Seat seat = new Seat(i, j);
-                Ticket ticket = new Ticket(uniqueID, seat);
-                this.available_seats.add(ticket);
+                Ticket ticket = new Ticket(token, seat);
+                this.availableTickets.put(token, ticket);
             }
         }
     }
@@ -46,7 +49,7 @@ public class Cinema {
         Ticket ticket = findSeatTicket(seat);
         if (ticket != null && ticket.isAvailable()) {
             ticket.setAvailable(false);
-            HashMap<String, Object> map = new HashMap<>();
+            Map<String, Object> map = new HashMap<>();
             map.put("ticket", ticket.getSeat());
             map.put("token", ticket.getToken());
             return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
@@ -57,7 +60,7 @@ public class Cinema {
     }
 
     private Ticket findSeatTicket(Seat seatNumber) {
-        for (Ticket ticket : this.available_seats) {
+        for (Ticket ticket : this.availableTickets.values()) {
             Seat seat = ticket.getSeat();
             if (seat.getRow() == seatNumber.getRow() && seat.getColumn() == seatNumber.getColumn()) {
                 return ticket;
@@ -68,14 +71,13 @@ public class Cinema {
     }
 
     public ResponseEntity<Object> refundTicket(String token) {
-        for (Ticket ticket : this.purchasedTickets) {
-            if (ticket.getToken().equals(token)) {
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("returned_ticket", ticket.getTicket());
-                return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
-            }
+        Ticket ticket = availableTickets.get(token);
+        if (ticket.getToken().equals(token)) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("returned_ticket", ticket.getSeat());
+            return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(new CustomErrorMessage("Wrong token!"), HttpStatus.BAD_REQUEST);
         }
-
-        return new ResponseEntity<>(new CustomErrorMessage("Wrong token!"), HttpStatus.BAD_REQUEST);
     }
 }
