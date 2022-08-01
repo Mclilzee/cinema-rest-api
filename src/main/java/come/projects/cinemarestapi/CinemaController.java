@@ -61,7 +61,7 @@ public class CinemaController {
             return new ResponseEntity<>(map, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(new CustomErrorMessage("The password is wrong!"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new CustomErrorMessage("The password is wrong!"), HttpStatus.UNAUTHORIZED);
     }
 
     private void generateStatistics(Map<String, Integer> map) {

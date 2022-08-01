@@ -13,6 +13,6 @@ public class CinemaExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return new ResponseEntity<>(new CustomErrorMessage("The password is wrong!"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new CustomErrorMessage("The password is wrong!"), HttpStatus.UNAUTHORIZED);
     }
 }
