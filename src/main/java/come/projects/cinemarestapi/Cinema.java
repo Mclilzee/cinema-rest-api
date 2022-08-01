@@ -3,10 +3,7 @@ package come.projects.cinemarestapi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Cinema {
 
@@ -47,18 +44,19 @@ public class Cinema {
         }
     }
 
-    public Ticket purchaseTicket(Seat purchaseSeat) {
+    public ResponseEntity<Object> purchaseTicket(Seat purchaseSeat) {
         for (int i = 0; i < this.available_seats.size(); i++) {
             Ticket ticket = this.available_seats.get(i);
             Seat seat = ticket.getTicket();
             if (seat.getRow() == purchaseSeat.getRow() && seat.getColumn() == purchaseSeat.getColumn()) {
-                this.available_seats.remove(ticket);
-                this.purchasedTickets.add(ticket);
-                return ticket;
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("token", ticket.getToken());
+                map.put("ticket", ticket.getTicket());
+                return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
             }
         }
 
-        throw new TicketPurchasingException("The ticket has been already purchased!");
+        return new ResponseEntity<>(new CustomErrorMessage("The ticket has been already purchased!"), HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity<Object> refundTicket(String token) {

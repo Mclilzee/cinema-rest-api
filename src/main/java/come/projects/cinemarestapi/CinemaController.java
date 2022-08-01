@@ -1,6 +1,11 @@
 package come.projects.cinemarestapi;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class CinemaController {
@@ -16,9 +21,11 @@ public class CinemaController {
     }
 
     @PostMapping("/purchase")
-    public Ticket purchaseTicket(@RequestBody Seat seat) {
+    public ResponseEntity<Object> purchaseTicket(@RequestBody Seat seat) {
         if (seat.getRow() < 1 || seat.getRow() > 9 || seat.getColumn() < 1 || seat.getColumn() > 9) {
-            throw new TicketPurchasingException("The number of a row or a column is out of bounds!");
+            Map<String, String> errorMessage = new HashMap<>();
+            errorMessage.put("error", "The number of a row or a column is out of bounds!");
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
 
         return this.cinema.purchaseTicket(seat);
