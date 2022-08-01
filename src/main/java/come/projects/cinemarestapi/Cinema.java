@@ -10,12 +10,12 @@ public class Cinema {
 
     private final int totalRows;
     private final int totalColumns;
-    private final Map<String, Ticket> availableTickets;
+    private final Map<String, Ticket> tickets;
 
     public Cinema(int totalRows, int totalColumns) {
         this.totalRows = totalRows;
         this.totalColumns = totalColumns;
-        this.availableTickets = new ConcurrentHashMap<>();
+        this.tickets = new ConcurrentHashMap<>();
 
         generateTickets();
     }
@@ -28,8 +28,8 @@ public class Cinema {
         return totalColumns;
     }
 
-    public Map<String, Ticket> getAvailableTickets() {
-        return availableTickets;
+    public Map<String, Ticket> getTickets() {
+        return tickets;
     }
 
     private void generateTickets() {
@@ -38,7 +38,7 @@ public class Cinema {
                 String token = UUID.randomUUID().toString();
                 Seat seat = new Seat(i, j);
                 Ticket ticket = new Ticket(token, seat);
-                this.availableTickets.put(token, ticket);
+                this.tickets.put(token, ticket);
             }
         }
     }
@@ -58,7 +58,7 @@ public class Cinema {
     }
 
     private Ticket findSeatTicket(Seat seatNumber) {
-        for (Ticket ticket : this.availableTickets.values()) {
+        for (Ticket ticket : this.tickets.values()) {
             Seat seat = ticket.getSeat();
             if (seat.getRow() == seatNumber.getRow() && seat.getColumn() == seatNumber.getColumn()) {
                 return ticket;
@@ -69,7 +69,7 @@ public class Cinema {
     }
 
     public ResponseEntity<Object> refundTicket(String token) {
-        Ticket ticket = availableTickets.get(token);
+        Ticket ticket = tickets.get(token);
         if (ticket != null && !ticket.isAvailable()) {
             ticket.setAvailable(true);
             HashMap<String, Object> map = new HashMap<>();

@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 public class CinemaController {
@@ -16,8 +16,24 @@ public class CinemaController {
     }
 
     @GetMapping("/seats")
-    public Cinema getCinema() {
-        return cinema;
+    public ResponseEntity<Object> getAvailableSeats() {
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("total_rows", this.cinema.getTotalRows());
+        map.put("total_columns", this.cinema.getTotalColumns());
+
+        List<Object> availableSeats = new ArrayList<>();
+        map.put("available_seats", availableSeats);
+
+        for (Ticket ticket : this.cinema.getTickets().values()) {
+            if (ticket.isAvailable()) {
+                Map<String, Object> seat = new LinkedHashMap<>();
+                seat.put("token", ticket.getToken());
+                seat.put("ticket", ticket.getSeat());
+                availableSeats.add(seat);
+            }
+        }
+
+        return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/purchase")
