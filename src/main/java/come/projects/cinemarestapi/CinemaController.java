@@ -1,9 +1,6 @@
 package come.projects.cinemarestapi;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CinemaController {
@@ -19,11 +16,11 @@ public class CinemaController {
     }
 
     @PostMapping("/purchase")
-    public Seat purchaseTicket(@RequestParam int row,@RequestParam int column) {
-        if (row < 1 || row > 9 || column < 1 || column > 9) {
+    public Seat purchaseTicket(@RequestBody Seat seat) {
+        if (seat.getRow() < 1 || seat.getRow() > 9 || seat.getColumn() < 1 || seat.getColumn() > 9) {
             throw new TicketPurchasingException("The number of a row or a column is out of bounds!");
         }
 
-        return this.cinema.purchaseSeat(row, column);
+        return this.cinema.purchaseSeat(seat);
     }
 }

@@ -42,10 +42,10 @@ public class Cinema {
         return seats;
     }
 
-    public Seat purchaseSeat(int row, int column) {
+    public Seat purchaseSeat(Seat purchaseSeat) {
         for (int i = 0; i < this.available_seats.size(); i++) {
             Seat seat = this.available_seats.get(i);
-            if (seat.getRow() == row && seat.getColumn() == column) {
+            if (seat.getRow() == purchaseSeat.getRow() && seat.getColumn() == purchaseSeat.getColumn()) {
                 this.available_seats.remove(seat);
                 return seat;
             }
