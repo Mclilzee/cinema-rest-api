@@ -3,6 +3,7 @@ package come.projects.cinemarestapi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController
 public class CinemaController {
     private final Cinema cinema;
-    private final String MANAGER_PASSWORD = "Password22234";
+    private final String MANAGER_PASSWORD = "super_secret";
 
     public CinemaController() {
         this.cinema = new Cinema(9, 9);
@@ -57,13 +58,13 @@ public class CinemaController {
     @PostMapping("/stats")
     public ResponseEntity<Object> getStats(@RequestParam String password) {
         if (Objects.equals(password, this.MANAGER_PASSWORD)) {
-            return new ResponseEntity<>(new CustomErrorMessage("The password is wrong!"), HttpStatus.BAD_REQUEST);
-        } else {
-           Map<String, Integer> map = new LinkedHashMap<>();
-           generateStatistics(map);
+            Map<String, Integer> map = new LinkedHashMap<>();
+            generateStatistics(map);
 
-           return new ResponseEntity<>(map, HttpStatus.OK);
+            return new ResponseEntity<>(map, HttpStatus.OK);
         }
+
+        return new ResponseEntity<>(new CustomErrorMessage("The password is wrong!"), HttpStatus.BAD_REQUEST);
     }
 
     private void generateStatistics(Map<String, Integer> map) {
