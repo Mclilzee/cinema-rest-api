@@ -29,10 +29,7 @@ public class CinemaController {
 
         for (Ticket ticket : this.cinema.getTickets().values()) {
             if (ticket.isAvailable()) {
-                Map<String, Object> seat = new LinkedHashMap<>();
-                seat.put("token", ticket.getToken());
-                seat.put("ticket", ticket.getSeat());
-                availableSeats.add(seat);
+                availableSeats.add(ticket.getSeat());
             }
         }
 
