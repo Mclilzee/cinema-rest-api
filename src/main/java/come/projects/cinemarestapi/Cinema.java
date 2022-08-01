@@ -1,5 +1,8 @@
 package come.projects.cinemarestapi;
 
+import org.springframework.web.client.HttpServerErrorException;
+
+import javax.management.RuntimeErrorException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,5 +40,19 @@ public class Cinema {
         }
 
         return seats;
+    }
+
+    public Seat purchaseSeat(int row, int column) {
+
+    }
+
+    public boolean isSeatPurchased(int row, int column) {
+        for (Seat seat : this.available_seats) {
+            if (seat.getRow() == row && seat.getColumn() == column) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

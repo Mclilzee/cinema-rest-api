@@ -1,6 +1,8 @@
 package come.projects.cinemarestapi;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -14,5 +16,12 @@ public class CinemaController {
     @GetMapping("/seats")
     public Cinema getCinema() {
         return cinema;
+    }
+
+    @PostMapping("/purchase")
+    public Seat purchaseTicket(@RequestParam int row,@RequestParam int column) {
+        if (row < 1 || row > 9 || column < 1 || column > 9) {
+
+        }
     }
 }
