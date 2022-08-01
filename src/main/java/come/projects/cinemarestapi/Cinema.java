@@ -3,9 +3,7 @@ package come.projects.cinemarestapi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Cinema {
@@ -49,9 +47,9 @@ public class Cinema {
         Ticket ticket = findSeatTicket(seat);
         if (ticket != null && ticket.isAvailable()) {
             ticket.setAvailable(false);
-            Map<String, Object> map = new HashMap<>();
-            map.put("ticket", ticket.getSeat());
+            Map<String, Object> map = new LinkedHashMap<>();
             map.put("token", ticket.getToken());
+            map.put("ticket", ticket.getSeat());
             return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>(new CustomErrorMessage("The ticket has been already purchased!"), HttpStatus.BAD_REQUEST);
@@ -75,7 +73,7 @@ public class Cinema {
         if (ticket.getToken().equals(token)) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("returned_ticket", ticket.getSeat());
-            return new ResponseEntity<Object>(map, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>(new CustomErrorMessage("Wrong token!"), HttpStatus.BAD_REQUEST);
         }
