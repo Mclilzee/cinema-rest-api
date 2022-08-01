@@ -2,18 +2,28 @@ package come.projects.cinemarestapi;
 
 public class Ticket {
     private final String token;
-    private final Seat ticket;
+    private final Seat seat;
+    private boolean available;
 
-    public Ticket(Seat ticket, String token) {
-        this.ticket = ticket;
+    public Ticket(String token, Seat seat) {
         this.token = token;
+        this.seat = seat;
+        this.available = true;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     public String getToken() {
-        return token;
+        return this.token;
     }
 
-    public Seat getTicket() {
-        return ticket;
+    public Seat getSeat() {
+        return this.seat;
     }
 }
