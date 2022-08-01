@@ -1,21 +1,19 @@
 package come.projects.cinemarestapi;
 
-import org.springframework.web.client.HttpServerErrorException;
-
-import javax.management.RuntimeErrorException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Cinema {
 
     private final int total_rows;
     private final int total_columns;
-    private final List<Seat> available_seats;
+    private final List<Ticket> available_seats;
 
     public Cinema(int total_rows, int total_columns) {
         this.total_rows = total_rows;
         this.total_columns = total_columns;
-        this.available_seats = generateSeats();
+        this.available_seats = generateTickets();
     }
 
     public int getTotal_rows() {
@@ -26,30 +24,32 @@ public class Cinema {
         return total_columns;
     }
 
-    public List<Seat> getAvailable_seats() {
+    public List<Ticket> getAvailable_seats() {
         return available_seats;
     }
 
-    private List<Seat> generateSeats() {
-        List<Seat> seats = new ArrayList<>();
+    private List<Ticket> generateTickets() {
+        List<Ticket> tickets = new ArrayList<>();
 
         for (int i = 1; i <= total_rows; i++) {
             for (int j = 1; j <= total_columns; j++) {
-                seats.add(new Seat(i, j));
+                Seat seat = new Seat(i, j);
+                Ticket ticket = new Ticket(seat, UUID.randomUUID().toString());
+                tickets.add(ticket);
             }
         }
 
-        return seats;
+        return tickets;
     }
 
     public Seat purchaseSeat(Seat purchaseSeat) {
-        for (int i = 0; i < this.available_seats.size(); i++) {
-            Seat seat = this.available_seats.get(i);
-            if (seat.getRow() == purchaseSeat.getRow() && seat.getColumn() == purchaseSeat.getColumn()) {
-                this.available_seats.remove(seat);
-                return seat;
-            }
-        }
+//        for (int i = 0; i < this.available_seats.size(); i++) {
+//            Seat seat = this.available_seats.get(i);
+//            if (seat.getRow() == purchaseSeat.getRow() && seat.getColumn() == purchaseSeat.getColumn()) {
+//                this.available_seats.remove(seat);
+//                return seat;
+//            }
+//        }
 
         throw new TicketPurchasingException("The ticket has been already purchased!");
     }
