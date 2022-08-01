@@ -56,28 +56,33 @@ public class CinemaController {
 
     @PostMapping("/stats")
     public ResponseEntity<Object> getStats(@RequestParam String password) {
-        if (password != this.MANAGER_PASSWORD) {
+        if (Objects.equals(password, this.MANAGER_PASSWORD)) {
             return new ResponseEntity<>(new CustomErrorMessage("The password is wrong!"), HttpStatus.BAD_REQUEST);
         } else {
            Map<String, Integer> map = new LinkedHashMap<>();
-           map.put("current_income", getIncome());
-           map.put("number_of_available_seats", getNumberOfAvailableSeats();
-           map.put("number_of_purchased_tickets", getPurchasedTickets());
+           generateStatistics(map);
 
            return new ResponseEntity<>(map, HttpStatus.OK);
         }
     }
 
-    private int getIncome() {
-        int sum = 0;
+    private void generateStatistics(Map<String, Integer> map) {
+        int income = 0;
+        int available = 0;
+        int purchased = 0;
+
         for (Ticket ticket : this.cinema.getTickets().values()) {
             if (!ticket.isAvailable()) {
-                sum += ticket.getSeat().getPrice();
+                income += ticket.getSeat().getPrice();
+                purchased++;
+            } else {
+                available++;
             }
         }
 
-        return sum;
+        map.put("current_income", income);
+        map.put("number_of_available_seats", available);
+        map.put("number_of_purchased_tickets", purchased);
     }
-
 
 }
